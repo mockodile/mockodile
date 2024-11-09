@@ -1,0 +1,29 @@
+plugins {
+    id 'java'
+}
+
+group = 'io.github.mockodile'
+version = '1.0-SNAPSHOT'
+
+allprojects {
+    repositories {
+        repositories {
+            mavenCentral()
+        }
+    }
+}
+
+subprojects {
+
+    apply plugin: 'java'
+
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(17)
+        }
+    }
+
+    test {
+        useJUnitPlatform()
+    }
+}

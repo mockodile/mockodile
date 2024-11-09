@@ -1,0 +1,6 @@
+rootProject.name = 'mockodile'
+include 'mockodile-core'
+include 'mockodile-wiremock-spring-boot'
+include 'mockodile-wiremock'
+include 'mockodile-mockserver'
+include 'mockodile-mockserver-spring-boot'
