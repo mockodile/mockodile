@@ -11,7 +11,7 @@ public class MockodileConfiguration {
 
     @Bean
     @Lazy
-    MockApi mockApi(MockServerClientHolder mockServerProvider) {
+    MockApi mockodileMockApi(MockServerClientHolder mockServerProvider) {
         return MockApiFactory.from(mockServerProvider);
     }
 }

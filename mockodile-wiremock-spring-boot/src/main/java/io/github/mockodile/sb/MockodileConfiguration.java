@@ -12,7 +12,7 @@ public class MockodileConfiguration {
 
     @Bean
     @Lazy
-    MockApi mockApi(WireMockServer wireMockServer) {
+    MockApi mockodileMockApi(WireMockServer wireMockServer) {
         return MockApiFactory.from(wireMockServer);
     }
 }
