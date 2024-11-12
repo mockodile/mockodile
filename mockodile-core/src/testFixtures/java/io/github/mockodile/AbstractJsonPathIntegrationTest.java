@@ -29,12 +29,32 @@ public abstract class AbstractJsonPathIntegrationTest extends AbstractIntegratio
     interface TestMockedApi {
         @Post(path = "/create")
         void createMatchWithJsonPath(@JsonPath(expression = "$.name") String name, @JsonPath(expression = "$.house") String house);
+
+        @Post(path = "/createWithBoolean")
+        void createMatchWithJsonPathBoolean(@JsonPath(expression = "$.name") String name, @JsonPath(expression = "$.flag") boolean flag);
+
+        @Post(path = "/createWithNumber")
+        void createMatchWithJsonPathNumber(@JsonPath(expression = "$.name") String name, @JsonPath(expression = "$.number") int number);
     }
 
     record TestBody(String name, String house) {
         String toJson() {
             return """
                     {"name":"%s","house":"%s"}""".formatted(name, house);
+        }
+    }
+
+    record TestBodyWithFlag(String name, boolean flag) {
+        String toJson() {
+            return """
+                    {"name":"%s","flag":%b}""".formatted(name, flag);
+        }
+    }
+
+    record TestBodyWithNumber(String name, int number) {
+        String toJson() {
+            return """
+                    {"name":"%s","number":%s}""".formatted(name, number);
         }
     }
 
@@ -144,6 +164,46 @@ public abstract class AbstractJsonPathIntegrationTest extends AbstractIntegratio
     void none_verifyNone_assertionPasses() {
         assertThatNoException()
                 .isThrownBy(() -> mockApi.verifyNone(() -> testMockedApi.createMatchWithJsonPath(matchesAnyString(), matchesAnyString())));
+    }
+
+    @Test
+    void mockPostWithJsonPathWithBooleanAndRequestResource_verify_passes() {
+        var testBody = new TestBodyWithFlag("Luna", true);
+        mockApi.when(() -> testMockedApi.createMatchWithJsonPathBoolean("Luna", true)).willReturn();
+
+        try {
+            HttpClient.newHttpClient()
+                    .send(
+                            HttpRequest.newBuilder()
+                                    .uri(TestUtil.uri(mockUrl, "/root-path/createWithBoolean"))
+                                    .POST(HttpRequest.BodyPublishers.ofString(testBody.toJson()))
+                                    .build(),
+                            BodyHandlers.ofString());
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+        mockApi.verify(() -> testMockedApi.createMatchWithJsonPathBoolean("Luna", true));
+    }
+
+    @Test
+    void mockPostWithJsonPathWithNumberAndRequestResource_verify_passes() {
+        var testBody = new TestBodyWithNumber("Ginny", 42);
+        mockApi.when(() -> testMockedApi.createMatchWithJsonPathNumber("Ginny", 42)).willReturn();
+
+        try {
+            HttpClient.newHttpClient()
+                    .send(
+                            HttpRequest.newBuilder()
+                                    .uri(TestUtil.uri(mockUrl, "/root-path/createWithNumber"))
+                                    .POST(HttpRequest.BodyPublishers.ofString(testBody.toJson()))
+                                    .build(),
+                            BodyHandlers.ofString());
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+        mockApi.verify(() -> testMockedApi.createMatchWithJsonPathNumber("Ginny", 42));
     }
 
     private HttpResponse<String> postToCreateEndpoint(TestBody testBody) {

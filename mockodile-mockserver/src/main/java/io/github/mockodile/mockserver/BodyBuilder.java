@@ -85,13 +85,22 @@ class BodyBuilder {
         var jsonPath = bodyParameter.paramAnnotationData().name();
 
         return switch (bodyParameter.argumentMatcher().type()) {
-            case EQ ->
-                    String.format("%s=='%s'", jsonPath, ((EqualityArgumentMatcher<?>) bodyParameter.argumentMatcher()).value().toString());
+            case EQ -> toEqExpression((EqualityArgumentMatcher<?>) bodyParameter.argumentMatcher(), jsonPath);
             case REG_EX ->
                     String.format("%s=~/%s/", jsonPath, ((RegularExpressionArgumentMatcher) bodyParameter.argumentMatcher()).expression());
             default ->
                     throw new IllegalArgumentException("Invalid argument matcher type for a json path parameter, only EQ or STRING_VALUE_PATTERN are supported but was " + bodyParameter.argumentMatcher().type());
         };
+    }
+
+    private static String toEqExpression(EqualityArgumentMatcher<?> argumentMatcher, String jsonPath) {
+        if (argumentMatcher.value() instanceof Boolean b) {
+            return String.format("%s==%s", jsonPath, b);
+        } else if (argumentMatcher.value() instanceof Number n) {
+            return String.format("%s==%s", jsonPath, n);
+        } else {
+            return String.format("%s=='%s'", jsonPath, argumentMatcher.value().toString());
+        }
     }
 
     private String encode(Object value) {

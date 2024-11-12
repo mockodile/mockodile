@@ -83,19 +83,23 @@ public class MockServerMocker implements Mocker {
         builder = builder.withBody(body);
 
         var queryParamsBuilder = QueryParams.builder();
-        httpRequest.getQueryStringParameters()
-                .getEntries()
-                .forEach(qp -> queryParamsBuilder.put(
-                        qp.getName().getValue(),
-                        qp.getValues().stream().map(NottableString::getValue).toList()));
+        if (httpRequest.getQueryStringParameters() != null) {
+            httpRequest.getQueryStringParameters()
+                    .getEntries()
+                    .forEach(qp -> queryParamsBuilder.put(
+                            qp.getName().getValue(),
+                            qp.getValues().stream().map(NottableString::getValue).toList()));
+        }
         builder.withQueryParams(queryParamsBuilder.build());
 
         var headersBuilder = HttpHeaders.builder();
-        httpRequest.getHeaders()
-                .getEntries()
-                .forEach(h -> headersBuilder.put(
-                        h.getName().getValue(),
-                        h.getValues().stream().map(NottableString::getValue).toList()));
+        if (httpRequest.getHeaders() != null) {
+            httpRequest.getHeaders()
+                    .getEntries()
+                    .forEach(h -> headersBuilder.put(
+                            h.getName().getValue(),
+                            h.getValues().stream().map(NottableString::getValue).toList()));
+        }
         builder.withHeaders(headersBuilder.build());
 
         return builder.build();
