@@ -13,6 +13,7 @@ import org.mockserver.model.StringBody;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.mockserver.model.JsonPathBody.jsonPath;
 
@@ -27,6 +28,7 @@ class BodyBuilder {
     }
 
     public Optional<Body<String>> build() {
+        var staticJsonPathParameters = invocation.annotationData().requestAnnotationData().jsonPaths();
         var jsonPathParameters = invocation.getParameters().stream()
                 .filter(p -> p.paramAnnotationData().paramType() == ParamType.JSON_PATH)
                 .toList();
@@ -37,12 +39,14 @@ class BodyBuilder {
                 .filter(p1 -> p1.argumentMatcher().type() != ArgumentMatcherType.ANY_BODY)
                 .toList();
 
-        if (!jsonPathParameters.isEmpty() && !bodyParameters.isEmpty()) {
+        boolean hasAtLeastOneJsonPath = !jsonPathParameters.isEmpty() || !staticJsonPathParameters.isEmpty();
+
+        if (hasAtLeastOneJsonPath && !bodyParameters.isEmpty()) {
             throw new IllegalArgumentException("MockServer cannot combine a body matcher with a json path matcher, it anyway doesn't make any sense");
         }
 
-        if (!jsonPathParameters.isEmpty()) {
-            return Optional.of(mapToJsonPath(jsonPathParameters));
+        if (hasAtLeastOneJsonPath) {
+            return Optional.of(mapToJsonPath(staticJsonPathParameters, jsonPathParameters));
         }
 
         if (!bodyParameters.isEmpty()) {
@@ -70,12 +74,18 @@ class BodyBuilder {
         };
     }
 
-    private Body<String> mapToJsonPath(List<Invocation.InvokedParameter> jsonPathParameters) {
+    private Body<String> mapToJsonPath(List<String> staticJsonPathParameters, List<Invocation.InvokedParameter> jsonPathParameters) {
         // joins all conditions into one Body with a json path such as [?($.firstName=='John' && $.lastName=='doe')]
         // where regex are used will be [?($.firstName=~/[Jj]ohn && $.lastName=~'[Dd]oe')]
-        var jsonPathExpressionsConjoined = jsonPathParameters.stream()
-                    .map(BodyBuilder::toExpression)
-                    .collect(Collectors.joining("&&"));
+
+        // static json path expressions which may be configured are taken one to one
+        // json path parameters which are mapped to a parameter are converted to an expression
+
+        var jsonPathExpressionsConjoined = Stream.concat(
+                jsonPathParameters.stream()
+                        .map(BodyBuilder::toExpression),
+                staticJsonPathParameters.stream())
+                .collect(Collectors.joining("&&"));
         var fullJsonPathExpression = "[?(" + jsonPathExpressionsConjoined + ")]";
         return jsonPath(fullJsonPathExpression);
     }

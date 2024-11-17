@@ -14,4 +14,6 @@ public @interface Post {
     String path() default "";
 
     String[] headers() default {};
+
+    String[] jsonPath() default {};
 }

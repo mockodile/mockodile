@@ -14,4 +14,6 @@ public @interface Options {
     String path() default "";
 
     String[] headers() default {};
+
+    String[] jsonPath() default {};
 }

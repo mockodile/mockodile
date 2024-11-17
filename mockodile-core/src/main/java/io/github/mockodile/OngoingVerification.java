@@ -43,7 +43,21 @@ public class OngoingVerification {
         return andGetRequest().body().value();
     }
 
+    public List<String> andGetRequestBodiesAsString() {
+        return andGetRequests().stream()
+                .map(Request::body)
+                .map(BodyAsString::value)
+                .toList();
+    }
+
     public <T> T andGetRequestBody(Class<T> clazz) {
         return andGetRequest(clazz).body();
     }
+
+    public <T> List<T> andGetRequestBodies(Class<T> clazz) {
+        return andGetRequests(clazz).stream()
+                .map(Request::body)
+                .toList();
+    }
+
 }

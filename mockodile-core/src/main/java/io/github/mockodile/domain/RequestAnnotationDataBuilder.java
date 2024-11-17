@@ -3,6 +3,7 @@ package io.github.mockodile.domain;
 import io.github.mockodile.utils.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -13,6 +14,7 @@ public class RequestAnnotationDataBuilder {
     private String path = "";
     private final HttpHeaders.HttpHeadersBuilder httpHeadersBuilder = HttpHeaders.builder();
     private final List<ParamAnnotationData> paramAnnotationData = new ArrayList<>();
+    private List<String> jsonPaths = new ArrayList<>();
 
     public RequestAnnotationDataBuilder withPath(String path) {
         if (!path.startsWith(PATH_DELIMITER)) {
@@ -51,11 +53,16 @@ public class RequestAnnotationDataBuilder {
         return this;
     }
 
+    public void withJsonPath(String[] jsonPaths) {
+        this.jsonPaths = Arrays.asList(jsonPaths);
+    }
+
     public RequestAnnotationData build() {
         return new RequestAnnotationData(
                 httpMethod != null ? httpMethod : HttpMethod.GET,
                 StringUtils.hasText(path) ? path : PATH_DELIMITER,
                 httpHeadersBuilder.build(),
-                Collections.unmodifiableList(paramAnnotationData));
+                Collections.unmodifiableList(paramAnnotationData),
+                Collections.unmodifiableList(jsonPaths));
     }
 }

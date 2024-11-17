@@ -14,4 +14,6 @@ public @interface Patch {
     String path() default "";
 
     String[] headers() default {};
+
+    String[] jsonPath() default {};
 }

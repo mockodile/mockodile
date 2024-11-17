@@ -8,7 +8,8 @@ import java.util.List;
 public record RequestAnnotationData(HttpMethod httpMethod,
                                     String path,
                                     HttpHeaders headers,
-                                    List<ParamAnnotationData> paramAnnotationData) {
+                                    List<ParamAnnotationData> paramAnnotationData,
+                                    List<String> jsonPaths) {
 
     public static RequestAnnotationDataBuilder builder() {
         return new RequestAnnotationDataBuilder();

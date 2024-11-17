@@ -14,4 +14,6 @@ public @interface Trace {
     String path() default "";
 
     String[] headers() default {};
+
+    String[] jsonPath() default {};
 }

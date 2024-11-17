@@ -35,6 +35,10 @@ public abstract class AbstractJsonPathIntegrationTest extends AbstractIntegratio
 
         @Post(path = "/createWithNumber")
         void createMatchWithJsonPathNumber(@JsonPath(expression = "$.name") String name, @JsonPath(expression = "$.number") int number);
+
+        // this only matches if the top level of the json contains an element called "a" (with any value) and an element called b with the specific value specified by the parameter
+        @Post(path = "/staticJsonPathExpression", jsonPath = "$.a")
+        String staticJsonPathExpression(@JsonPath(expression = "$.b") String b);
     }
 
     record TestBody(String name, String house) {
@@ -55,6 +59,20 @@ public abstract class AbstractJsonPathIntegrationTest extends AbstractIntegratio
         String toJson() {
             return """
                     {"name":"%s","number":%s}""".formatted(name, number);
+        }
+    }
+
+    record TestBodyWithRootElementA(String a, String b) {
+        String toJson() {
+            return """
+                    {"a":"%s","b":"%s"}""".formatted(a, b);
+        }
+    }
+
+    record TestBodyWithoutRootElementA(String x, String b) {
+        String toJson() {
+            return """
+                    {"x":"%s","b":"%s"}""".formatted(x, b);
         }
     }
 
@@ -206,6 +224,27 @@ public abstract class AbstractJsonPathIntegrationTest extends AbstractIntegratio
         mockApi.verify(() -> testMockedApi.createMatchWithJsonPathNumber("Ginny", 42));
     }
 
+    @Test
+    void mockPostWithStaticJsonPathAndRequestResource_verify_passes() {
+        var testBody = new TestBodyWithRootElementA("aaa", "bbb");
+        mockApi.when(() -> testMockedApi.staticJsonPathExpression("bbb")).willReturn();
+
+        postToStaticJsonEndpoint(testBody.toJson());
+
+        mockApi.verify(() -> testMockedApi.staticJsonPathExpression("bbb"));
+    }
+
+    @Test
+    void mockPostWithStaticJsonPathAndRequestResourceWithStaticExpressionNotMatching_verify_fails() {
+        var testBody = new TestBodyWithoutRootElementA("aaa", "bbb");
+        mockApi.when(() -> testMockedApi.staticJsonPathExpression("bbb")).willReturn();
+
+        postToStaticJsonEndpoint(testBody.toJson());
+
+        assertThatExceptionOfType(AssertionError.class)
+                .isThrownBy(() -> mockApi.verify(() -> testMockedApi.staticJsonPathExpression("bbb")));
+    }
+
     private HttpResponse<String> postToCreateEndpoint(TestBody testBody) {
         try {
             return HttpClient.newHttpClient()
@@ -219,4 +258,19 @@ public abstract class AbstractJsonPathIntegrationTest extends AbstractIntegratio
             throw new RuntimeException(e);
         }
     }
+
+    private void postToStaticJsonEndpoint(String testBody) {
+        try {
+            HttpClient.newHttpClient()
+                    .send(
+                            HttpRequest.newBuilder()
+                                    .uri(TestUtil.uri(mockUrl, "/root-path/staticJsonPathExpression"))
+                                    .POST(HttpRequest.BodyPublishers.ofString(testBody))
+                                    .build(),
+                            BodyHandlers.ofString());
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

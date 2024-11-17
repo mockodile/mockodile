@@ -31,51 +31,55 @@ public final class RequestMethodAnnotationUtil {
 
     private static void applyGet(Get get, RequestAnnotationDataBuilder builder) {
         builder.withHttpMethod(HttpMethod.GET);
-        apply(get.path(), get.headers(), builder);
+        apply(get.path(), get.headers(), get.jsonPath(), builder);
     }
 
     private static void applyHead(Head head, RequestAnnotationDataBuilder builder) {
         builder.withHttpMethod(HttpMethod.HEAD);
-        apply(head.path(), head.headers(), builder);
+        apply(head.path(), head.headers(), head.jsonPath(), builder);
     }
 
     private static void applyPost(Post post, RequestAnnotationDataBuilder builder) {
         builder.withHttpMethod(HttpMethod.POST);
-        apply(post.path(), post.headers(), builder);
+        apply(post.path(), post.headers(), post.jsonPath(), builder);
     }
 
     private static void applyPut(Put put, RequestAnnotationDataBuilder builder) {
         builder.withHttpMethod(HttpMethod.PUT);
-        apply(put.path(), put.headers(), builder);
+        apply(put.path(), put.headers(), put.jsonPath(), builder);
     }
 
     private static void applyPatch(Patch patch, RequestAnnotationDataBuilder builder) {
         builder.withHttpMethod(HttpMethod.PATCH);
-        apply(patch.path(), patch.headers(), builder);
+        apply(patch.path(), patch.headers(), patch.jsonPath(), builder);
     }
 
     private static void applyDelete(Delete delete, RequestAnnotationDataBuilder builder) {
         builder.withHttpMethod(HttpMethod.DELETE);
-        apply(delete.path(), delete.headers(), builder);
+        apply(delete.path(), delete.headers(), delete.jsonPath(), builder);
     }
 
     private static void applyOptions(Options options, RequestAnnotationDataBuilder builder) {
         builder.withHttpMethod(HttpMethod.OPTIONS);
-        apply(options.path(), options.headers(), builder);
+        apply(options.path(), options.headers(), options.jsonPath(), builder);
     }
 
     private static void applyTrace(Trace trace, RequestAnnotationDataBuilder builder) {
         builder.withHttpMethod(HttpMethod.TRACE);
-        apply(trace.path(), trace.headers(), builder);
+        apply(trace.path(), trace.headers(), trace.jsonPath(), builder);
     }
 
-    private static void apply(String path, String[] headers, RequestAnnotationDataBuilder builder) {
+    private static void apply(String path, String[] headers, String[] jsonPath, RequestAnnotationDataBuilder builder) {
         if (StringUtils.hasText(path)) {
             builder.withPath(path);
         }
 
         if (headers != null) {
             builder.withHeaders(List.of(headers));
+        }
+
+        if (jsonPath != null) {
+            builder.withJsonPath(jsonPath);
         }
     }
 

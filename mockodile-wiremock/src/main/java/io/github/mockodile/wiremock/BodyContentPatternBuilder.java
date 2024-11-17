@@ -43,6 +43,7 @@ class BodyContentPatternBuilder {
 
         allStringValuePattern.addAll(requestBodyParams());
         allStringValuePattern.addAll(jsonPathParams());
+        allStringValuePattern.addAll(staticJsonPathParams());
 
         if (CollectionUtils.isEmpty(allStringValuePattern)) {
             return Optional.empty();
@@ -79,6 +80,13 @@ class BodyContentPatternBuilder {
         return invocation.getParameters().stream()
                 .filter(p -> p.paramAnnotationData().paramType() == ParamType.JSON_PATH)
                 .map(this::jsonPathToStringValuePattern)
+                .toList();
+    }
+
+    private List<StringValuePattern> staticJsonPathParams() {
+        return invocation.annotationData().requestAnnotationData().jsonPaths()
+                .stream()
+                .map(WireMock::matchingJsonPath)
                 .toList();
     }
 

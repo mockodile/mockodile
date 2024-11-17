@@ -68,6 +68,22 @@ public class OngoingStubbing<T> {
     }
 
     /**
+     * Specify the status of the http response.
+     * The status param will overwrite any annotated @Response.status() annotation.
+     * No body will be returned.
+     * The headers provided will only contain headers specified on the @MockedApi.
+     *
+     * @param status the status of the http response
+     */
+    public void willReturn(int status) {
+        @SuppressWarnings("unchecked")
+        Response.ResponseBuilder<T> responseBuilder = (Response.ResponseBuilder<T>) Response.builder()
+                .withStatus(status)
+                .withHeaders(invocation.annotationData().responseAnnotationData().headers());
+        willReturnResponse(responseBuilder.build());
+    }
+
+    /**
      * Allow a complete custom response to be specified.
      * This is useful when the declarative means to specify a response are not adequate
      * or for testing edge cases where an unexpected response should be produced.
@@ -79,5 +95,77 @@ public class OngoingStubbing<T> {
      */
     public void willReturnResponse(Response<?> response) {
         mocker.register(invocation, response);
+    }
+
+    public void ok() {
+        willReturn(200);
+    }
+
+    public void created() {
+        willReturn(201);
+    }
+
+    public void accepted() {
+        willReturn(202);
+    }
+
+    public void noContent() {
+        willReturn(204);
+    }
+
+    public void movedPermanently() {
+        willReturn(301);
+    }
+
+    public void temporaryRedirect() {
+        willReturn(307);
+    }
+
+    public void permanentRedirect() {
+        willReturn(308);
+    }
+
+    public void badRequest() {
+        willReturn(400);
+    }
+
+    public void unauthorized() {
+        willReturn(401);
+    }
+
+    public void forbidden() {
+        willReturn(403);
+    }
+
+    public void notFound() {
+        willReturn(404);
+    }
+
+    public void conflict() {
+        willReturn(409);
+    }
+
+    public void preConditionFailed() {
+        willReturn(412);
+    }
+
+    public void unprocessableEntity() {
+        willReturn(422);
+    }
+
+    public void tooManyRequests() {
+        willReturn(429);
+    }
+
+    public void serverError() {
+        willReturn(500);
+    }
+
+    public void badGateway() {
+        willReturn(502);
+    }
+
+    public void serviceUnavailable() {
+        willReturn(503);
     }
 }
