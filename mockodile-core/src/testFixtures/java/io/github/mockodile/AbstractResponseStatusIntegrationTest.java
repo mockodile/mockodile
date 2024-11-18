@@ -36,7 +36,7 @@ public abstract class AbstractResponseStatusIntegrationTest extends AbstractInte
     @Test
     void mockWithCustomResponseStatus_requestResource_specifiedResponseReturned() {
         mockApi.when(testMockedApi.imATeapot())
-                .willReturn("short and stout");
+                .thenReturn("short and stout");
 
         var response = getSayImATeapot();
 
@@ -46,7 +46,7 @@ public abstract class AbstractResponseStatusIntegrationTest extends AbstractInte
     @Test
     void mockWithDefaultResponseStatus_requestResource_specifiedResponseReturned() {
         mockApi.when(testMockedApi.ok())
-                .willReturn("here is my handle");
+                .thenReturn("here is my handle");
 
         var response = getSayOk();
         assertThat(response.statusCode()).isEqualTo(200);

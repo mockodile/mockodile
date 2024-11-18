@@ -32,7 +32,7 @@ public abstract class AbstractRequestCountIntegrationTest extends AbstractIntegr
 
     @Test
     void invokeOne_verifyOne_assertionPasses() {
-        mockApi.when(testMockedApi.sayHello()).willReturn("hello");
+        mockApi.when(testMockedApi.sayHello()).thenReturn("hello");
         getWithFixedEndpoint();
 
         assertThatNoException().isThrownBy(() -> mockApi.verify(1, testMockedApi.sayHello()));
@@ -41,7 +41,7 @@ public abstract class AbstractRequestCountIntegrationTest extends AbstractIntegr
     @Test
     @SuppressWarnings("java:S5778")
     void invokeOnce_verifyNone_assertionError() {
-        mockApi.when(testMockedApi.sayHello()).willReturn("hello");
+        mockApi.when(testMockedApi.sayHello()).thenReturn("hello");
         getWithFixedEndpoint();
 
         assertThatExceptionOfType(AssertionError.class).isThrownBy(() -> mockApi.verifyNone(testMockedApi.sayHello()));
@@ -49,7 +49,7 @@ public abstract class AbstractRequestCountIntegrationTest extends AbstractIntegr
 
     @Test
     void invokeOnce_verifyLessThanTwo_assertionPasses() {
-        mockApi.when(testMockedApi.sayHello()).willReturn("hello");
+        mockApi.when(testMockedApi.sayHello()).thenReturn("hello");
         getWithFixedEndpoint();
 
         assertThatNoException().isThrownBy(() -> mockApi.verify(RequestCount.lessThan(2), testMockedApi.sayHello()));
@@ -58,7 +58,7 @@ public abstract class AbstractRequestCountIntegrationTest extends AbstractIntegr
     @Test
     @SuppressWarnings("java:S5778")
     void invokeOnce_verifyLessThanOne_assertionError() {
-        mockApi.when(testMockedApi.sayHello()).willReturn("hello");
+        mockApi.when(testMockedApi.sayHello()).thenReturn("hello");
         getWithFixedEndpoint();
 
         assertThatExceptionOfType(AssertionError.class)
@@ -67,7 +67,7 @@ public abstract class AbstractRequestCountIntegrationTest extends AbstractIntegr
 
     @Test
     void invokeTwice_verifyTwo_assertionPasses() {
-        mockApi.when(testMockedApi.sayHello()).willReturn("hello");
+        mockApi.when(testMockedApi.sayHello()).thenReturn("hello");
         getWithFixedEndpoint();
         getWithFixedEndpoint();
 
@@ -76,7 +76,7 @@ public abstract class AbstractRequestCountIntegrationTest extends AbstractIntegr
 
     @Test
     void invokeTwice_verifyMoreThanOne_assertionPasses() {
-        mockApi.when(testMockedApi.sayHello()).willReturn("hello");
+        mockApi.when(testMockedApi.sayHello()).thenReturn("hello");
         getWithFixedEndpoint();
         getWithFixedEndpoint();
 
@@ -102,7 +102,7 @@ public abstract class AbstractRequestCountIntegrationTest extends AbstractIntegr
     @Test
     @SuppressWarnings("java:S5778")
     void invokeTwice_verifyMoreThanTwo_assertionError() {
-        mockApi.when(testMockedApi.sayHello()).willReturn("hello");
+        mockApi.when(testMockedApi.sayHello()).thenReturn("hello");
         getWithFixedEndpoint();
         getWithFixedEndpoint();
 

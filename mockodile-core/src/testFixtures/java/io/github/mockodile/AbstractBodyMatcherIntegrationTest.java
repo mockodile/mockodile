@@ -39,7 +39,7 @@ public abstract class AbstractBodyMatcherIntegrationTest extends AbstractIntegra
 
     @Test
     void mockPostWithRequestBodyMatchesAny_requestResource_specifiedResponseReturned() {
-        mockApi.when(() -> testMockedApi.create(anyBody())).willReturn();
+        mockApi.when(() -> testMockedApi.create(anyBody())).thenReturnDefault();
 
         HttpResponse<String> response = postCreate(new TestBody("Harry", "Gryffindor"));
 
@@ -50,7 +50,7 @@ public abstract class AbstractBodyMatcherIntegrationTest extends AbstractIntegra
     @Test
     void mockPostWithRequestBodyEquals_requestResource_specifiedResponseReturned() {
         var testBody = new TestBody("Draco", "Slytherin");
-        mockApi.when(() -> testMockedApi.create(testBody)).willReturn();
+        mockApi.when(() -> testMockedApi.create(testBody)).thenReturnDefault();
 
         // comparing bodies as formatted strings is probably not very useful
         // however it is supported therefore it is tested here
@@ -63,7 +63,7 @@ public abstract class AbstractBodyMatcherIntegrationTest extends AbstractIntegra
     @Test
     void mockPostWithRequestMatchesExpression_requestResource_specifiedResponseReturned() {
         var testBody = new TestBody("Luna", "Ravenclaw");
-        mockApi.when(() -> testMockedApi.create(matches(".*Luna.*"))).willReturn();
+        mockApi.when(() -> testMockedApi.create(matches(".*Luna.*"))).thenReturnDefault();
 
         // comparing bodies using patterns is probably not very useful
         // however it is supported therefore it is tested here
@@ -76,7 +76,7 @@ public abstract class AbstractBodyMatcherIntegrationTest extends AbstractIntegra
     @Test
     void mockPostWithRequestMatchesExpression_requestResourceWithMismatchedBody_notFound() {
         var testBody = new TestBody("Luna", "Ravenclaw");
-        mockApi.when(() -> testMockedApi.create(matches(".*Neville.*"))).willReturn();
+        mockApi.when(() -> testMockedApi.create(matches(".*Neville.*"))).thenReturnDefault();
 
         // comparing bodies using patterns is probably not very useful
         // however it is supported therefore it is tested here
@@ -88,7 +88,7 @@ public abstract class AbstractBodyMatcherIntegrationTest extends AbstractIntegra
     @Test
     void mockPostAndRequestResource_verifyAnyBody_assertionPasses() {
         var testBody = new TestBody("Luna", "Ravenclaw");
-        mockApi.when(() -> testMockedApi.create(anyBody())).willReturn();
+        mockApi.when(() -> testMockedApi.create(anyBody())).thenReturnDefault();
         postCreate(testBody);
 
         assertThatNoException().isThrownBy(() -> mockApi.verify(() -> testMockedApi.create(anyBody())));
@@ -97,7 +97,7 @@ public abstract class AbstractBodyMatcherIntegrationTest extends AbstractIntegra
     @Test
     void mockPostAndRequestResource_verifyBodyEquals_assertionPasses() {
         var testBody = new TestBody("Luna", "Ravenclaw");
-        mockApi.when(() -> testMockedApi.create(anyBody())).willReturn();
+        mockApi.when(() -> testMockedApi.create(anyBody())).thenReturnDefault();
         postCreate(testBody);
 
         assertThatNoException().isThrownBy(() -> mockApi.verify(() -> testMockedApi.create(testBody)));
@@ -107,7 +107,7 @@ public abstract class AbstractBodyMatcherIntegrationTest extends AbstractIntegra
     void mockPostAndRequestResource_verifyBodyEqualsWithMismatchedBody_assertionError() {
         var testBody = new TestBody("Luna", "Ravenclaw");
         var testBodyDoesNotMatch = new TestBody("Luma", "Ravenclam");
-        mockApi.when(() -> testMockedApi.create(anyBody())).willReturn();
+        mockApi.when(() -> testMockedApi.create(anyBody())).thenReturnDefault();
         postCreate(testBody);
 
         assertThatExceptionOfType(AssertionError.class)
@@ -117,7 +117,7 @@ public abstract class AbstractBodyMatcherIntegrationTest extends AbstractIntegra
     @Test
     void mockPostAndRequestResource_verifyBodyEqualsExpressionMatch_assertionPasses() {
         var testBody = new TestBody("Luna", "Ravenclaw");
-        mockApi.when(() -> testMockedApi.create(anyBody())).willReturn();
+        mockApi.when(() -> testMockedApi.create(anyBody())).thenReturnDefault();
         postCreate(testBody);
 
         assertThatNoException()
@@ -127,7 +127,7 @@ public abstract class AbstractBodyMatcherIntegrationTest extends AbstractIntegra
     @Test
     void mockPostAndRequestResource_verifyBodyEqualsExpressionMatchWhichDoesNotMatch_assertionError() {
         var testBody = new TestBody("Luna", "Ravenclaw");
-        mockApi.when(() -> testMockedApi.create(anyBody())).willReturn();
+        mockApi.when(() -> testMockedApi.create(anyBody())).thenReturnDefault();
         postCreate(testBody);
 
         assertThatExceptionOfType(AssertionError.class)
@@ -137,7 +137,7 @@ public abstract class AbstractBodyMatcherIntegrationTest extends AbstractIntegra
     @Test
     void mockPostAndRequestResource_verifyNone_assertionError() {
         var testBody = new TestBody("Luna", "Ravenclaw");
-        mockApi.when(() -> testMockedApi.create(anyBody())).willReturn();
+        mockApi.when(() -> testMockedApi.create(anyBody())).thenReturnDefault();
         postCreate(testBody);
 
         assertThatExceptionOfType(AssertionError.class)

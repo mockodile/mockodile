@@ -38,7 +38,7 @@ public abstract class AbstractPathParamIntegrationTest extends AbstractIntegrati
     protected void mockGetWithPathParam_requestResource_specifiedResponseReturned() {
         String helloMessage = "hello " + UUID.randomUUID();
         String id = UUID.randomUUID().toString();
-        mockApi.when(testMockedApi.getById(id)).willReturn(helloMessage);
+        mockApi.when(testMockedApi.getById(id)).thenReturn(helloMessage);
 
         HttpResponse<String> response = getWithPathParam(id);
 
@@ -51,7 +51,7 @@ public abstract class AbstractPathParamIntegrationTest extends AbstractIntegrati
         String helloMessage = "hello " + UUID.randomUUID();
         String id = UUID.randomUUID().toString();
         String wrongId = UUID.randomUUID().toString();
-        mockApi.when(testMockedApi.getById(id)).willReturn(helloMessage);
+        mockApi.when(testMockedApi.getById(id)).thenReturn(helloMessage);
 
         HttpResponse<String> response = getWithPathParam(wrongId);
 
@@ -62,7 +62,7 @@ public abstract class AbstractPathParamIntegrationTest extends AbstractIntegrati
     void mockGetWithPathParamMatchingAnyValue_requestResource_specifiedResponseReturned() {
         String helloMessage = "hello " + UUID.randomUUID();
         String id = UUID.randomUUID().toString();
-        mockApi.when(testMockedApi.getById(anyPath())).willReturn(helloMessage);
+        mockApi.when(testMockedApi.getById(anyPath())).thenReturn(helloMessage);
 
         HttpResponse<String> response = getWithPathParam(id);
 
@@ -76,7 +76,7 @@ public abstract class AbstractPathParamIntegrationTest extends AbstractIntegrati
         var random = new Random();
         String id = Math.abs(random.nextInt(31)) + "-separator-" + Math.abs(random.nextInt(31));
 
-        mockApi.when(testMockedApi.getById(pathMatches("[0-9]*-separator-[0-9]*"))).willReturn(helloMessage);
+        mockApi.when(testMockedApi.getById(pathMatches("[0-9]*-separator-[0-9]*"))).thenReturn(helloMessage);
 
         HttpResponse<String> response = getWithPathParam(id);
 
@@ -87,7 +87,7 @@ public abstract class AbstractPathParamIntegrationTest extends AbstractIntegrati
     @Test
     void mockGetAndRequestResource_verifyWithPathParam_assertionPasses() {
         String id = UUID.randomUUID().toString();
-        mockApi.when(testMockedApi.getById(anyPath())).willReturn("hello " + UUID.randomUUID());
+        mockApi.when(testMockedApi.getById(anyPath())).thenReturn("hello " + UUID.randomUUID());
         getWithPathParam(id);
 
         assertThatNoException().isThrownBy(() -> mockApi.verify(testMockedApi.getById(id)));
@@ -98,7 +98,7 @@ public abstract class AbstractPathParamIntegrationTest extends AbstractIntegrati
     void mockGetAndRequestResource_verifyWithMismatchedPathParamValue_assertionError() {
         String id = UUID.randomUUID().toString();
         String mismatchedId = UUID.randomUUID().toString();
-        mockApi.when(testMockedApi.getById(anyPath())).willReturn("hello " + UUID.randomUUID());
+        mockApi.when(testMockedApi.getById(anyPath())).thenReturn("hello " + UUID.randomUUID());
         getWithPathParam(id);
 
         assertThatExceptionOfType(AssertionError.class).isThrownBy(() -> mockApi.verify(testMockedApi.getById(mismatchedId)));
@@ -107,7 +107,7 @@ public abstract class AbstractPathParamIntegrationTest extends AbstractIntegrati
     @Test
     void mockGetAndRequestResource_verifyWithAnyPathParamValue_assertionPasses() {
         String id = UUID.randomUUID().toString();
-        mockApi.when(testMockedApi.getById(anyPath())).willReturn("hello " + UUID.randomUUID());
+        mockApi.when(testMockedApi.getById(anyPath())).thenReturn("hello " + UUID.randomUUID());
         getWithPathParam(id);
 
         assertThatNoException().isThrownBy(() -> mockApi.verify(testMockedApi.getById(anyPath())));
@@ -117,7 +117,7 @@ public abstract class AbstractPathParamIntegrationTest extends AbstractIntegrati
     void mockGetAndRequestResource_verifyWithCustomPattern_assertionPasses() {
         Random random = new Random();
         String id = Math.abs(random.nextInt(31)) + "-separator-" + Math.abs(random.nextInt(31));
-        mockApi.when(testMockedApi.getById(anyPath())).willReturn("hello " + UUID.randomUUID());
+        mockApi.when(testMockedApi.getById(anyPath())).thenReturn("hello " + UUID.randomUUID());
         getWithPathParam(id);
 
         assertThatNoException()
@@ -129,7 +129,7 @@ public abstract class AbstractPathParamIntegrationTest extends AbstractIntegrati
     void mockGetAndRequestResource_verifyWithMismatchedCustomPattern_assertionError() {
         Random random = new Random();
         String id = Math.abs(random.nextInt(31)) + "-separator-" + Math.abs(random.nextInt(31));
-        mockApi.when(testMockedApi.getById(anyPath())).willReturn("hello " + UUID.randomUUID());
+        mockApi.when(testMockedApi.getById(anyPath())).thenReturn("hello " + UUID.randomUUID());
         getWithPathParam(id);
 
         assertThatExceptionOfType(AssertionError.class)
@@ -140,7 +140,7 @@ public abstract class AbstractPathParamIntegrationTest extends AbstractIntegrati
     @SuppressWarnings("java:S5778")
     void mockGetAndRequestResource_verifyNone_assertionError() {
         String id = UUID.randomUUID().toString();
-        mockApi.when(testMockedApi.getById(anyPath())).willReturn("hello " + UUID.randomUUID());
+        mockApi.when(testMockedApi.getById(anyPath())).thenReturn("hello " + UUID.randomUUID());
         getWithPathParam(id);
 
         assertThatExceptionOfType(AssertionError.class)
@@ -151,7 +151,7 @@ public abstract class AbstractPathParamIntegrationTest extends AbstractIntegrati
     void mockGetAndRequestResource_verifyNoneWithDifferentId_assertionPasses() {
         String id = UUID.randomUUID().toString();
         String notCalled = UUID.randomUUID().toString();
-        mockApi.when(testMockedApi.getById(anyPath())).willReturn("hello " + UUID.randomUUID());
+        mockApi.when(testMockedApi.getById(anyPath())).thenReturn("hello " + UUID.randomUUID());
         getWithPathParam(id);
 
         assertThatNoException()
@@ -160,7 +160,7 @@ public abstract class AbstractPathParamIntegrationTest extends AbstractIntegrati
 
     @Test
     void mockGetAndRequestResourceWithEqualsNotMatched_verifyNone_assertionPasses() {
-        mockApi.when(testMockedApi.getById("any.*id")).willReturn("hello " + UUID.randomUUID());
+        mockApi.when(testMockedApi.getById("any.*id")).thenReturn("hello " + UUID.randomUUID());
         // does not match with an equals
         getWithPathParam("any-id");
 

@@ -79,7 +79,7 @@ public abstract class AbstractJsonPathIntegrationTest extends AbstractIntegratio
     @Test
     void mockPostWithJsonPath_requestResource_specifiedResponseReturned() {
         var testBody = new TestBody("Cedric", "Hufflepuff");
-        mockApi.when(() -> testMockedApi.createMatchWithJsonPath("Cedric", "Hufflepuff")).willReturn();
+        mockApi.when(() -> testMockedApi.createMatchWithJsonPath("Cedric", "Hufflepuff")).thenReturnDefault();
 
         HttpResponse<String> response = postToCreateEndpoint(testBody);
 
@@ -90,7 +90,7 @@ public abstract class AbstractJsonPathIntegrationTest extends AbstractIntegratio
     @Test
     void mockPostWithJsonPath_requestResourceWithMismatch_specifiedResponseReturned() {
         var testBody = new TestBody("Cedric", "Hufflepuff");
-        mockApi.when(() -> testMockedApi.createMatchWithJsonPath("Cedric", "Gryffindor")).willReturn();
+        mockApi.when(() -> testMockedApi.createMatchWithJsonPath("Cedric", "Gryffindor")).thenReturnDefault();
 
         HttpResponse<String> response = postToCreateEndpoint(testBody);
 
@@ -100,7 +100,7 @@ public abstract class AbstractJsonPathIntegrationTest extends AbstractIntegratio
     @Test
     void mockPostWithJsonPathMatches_requestResource_specifiedResponseReturned() {
         var testBody = new TestBody("Cedric", "Hufflepuff");
-        mockApi.when(() -> testMockedApi.createMatchWithJsonPath(eq("Cedric"), matches("[hH]ufflepuff"))).willReturn();
+        mockApi.when(() -> testMockedApi.createMatchWithJsonPath(eq("Cedric"), matches("[hH]ufflepuff"))).thenReturnDefault();
 
         HttpResponse<String> response = postToCreateEndpoint(testBody);
 
@@ -111,7 +111,7 @@ public abstract class AbstractJsonPathIntegrationTest extends AbstractIntegratio
     @Test
     void mockPostWithJsonPathMatches_requestResourceWithMismatchedBody_specifiedResponseReturned() {
         var testBody = new TestBody("Cedric", "Pufflepuff");
-        mockApi.when(() -> testMockedApi.createMatchWithJsonPath(eq("Cedric"), matches("[hH]ufflepuff"))).willReturn();
+        mockApi.when(() -> testMockedApi.createMatchWithJsonPath(eq("Cedric"), matches("[hH]ufflepuff"))).thenReturnDefault();
 
         HttpResponse<String> response = postToCreateEndpoint(testBody);
 
@@ -121,7 +121,7 @@ public abstract class AbstractJsonPathIntegrationTest extends AbstractIntegratio
     @Test
     void mockPostWithJsonPathAndRequestResource_verify_assertionPasses() {
         var testBody = new TestBody("Cedric", "Hufflepuff");
-        mockApi.when(() -> testMockedApi.createMatchWithJsonPath(matchesAnyString(), matchesAnyString())).willReturn();
+        mockApi.when(() -> testMockedApi.createMatchWithJsonPath(matchesAnyString(), matchesAnyString())).thenReturnDefault();
 
         postToCreateEndpoint(testBody);
 
@@ -131,7 +131,7 @@ public abstract class AbstractJsonPathIntegrationTest extends AbstractIntegratio
     @Test
     void mockPostWithJsonPathAndRequestResource_verifyWithMismatchedValue_assertionError() {
         var testBody = new TestBody("Cedric", "Hufflepuff");
-        mockApi.when(() -> testMockedApi.createMatchWithJsonPath(matchesAnyString(), matchesAnyString())).willReturn();
+        mockApi.when(() -> testMockedApi.createMatchWithJsonPath(matchesAnyString(), matchesAnyString())).thenReturnDefault();
 
         postToCreateEndpoint(testBody);
 
@@ -142,7 +142,7 @@ public abstract class AbstractJsonPathIntegrationTest extends AbstractIntegratio
     @Test
     void mockPostWithJsonPathAndRequestResource_verifyWithPatternMatcher_assertionPasses() {
         var testBody = new TestBody("Cedric", "Hufflepuff");
-        mockApi.when(() -> testMockedApi.createMatchWithJsonPath(matchesAnyString(), matchesAnyString())).willReturn();
+        mockApi.when(() -> testMockedApi.createMatchWithJsonPath(matchesAnyString(), matchesAnyString())).thenReturnDefault();
 
         postToCreateEndpoint(testBody);
 
@@ -153,7 +153,7 @@ public abstract class AbstractJsonPathIntegrationTest extends AbstractIntegratio
     @Test
     void mockPostWithJsonPathAndRequestResource_verifyWithPatternMatcherDoesntMatch_assertionError() {
         var testBody = new TestBody("Cedric", "Hufflepuff");
-        mockApi.when(() -> testMockedApi.createMatchWithJsonPath(matchesAnyString(), matchesAnyString())).willReturn();
+        mockApi.when(() -> testMockedApi.createMatchWithJsonPath(matchesAnyString(), matchesAnyString())).thenReturnDefault();
 
         postToCreateEndpoint(testBody);
 
@@ -164,7 +164,7 @@ public abstract class AbstractJsonPathIntegrationTest extends AbstractIntegratio
     @Test
     void mockPostWithJsonPathAndRequestResource_verifyNone_assertionError() {
         var testBody = new TestBody("Cedric", "Hufflepuff");
-        mockApi.when(() -> testMockedApi.createMatchWithJsonPath(matchesAnyString(), matchesAnyString())).willReturn();
+        mockApi.when(() -> testMockedApi.createMatchWithJsonPath(matchesAnyString(), matchesAnyString())).thenReturnDefault();
 
         postToCreateEndpoint(testBody);
 
@@ -187,7 +187,7 @@ public abstract class AbstractJsonPathIntegrationTest extends AbstractIntegratio
     @Test
     void mockPostWithJsonPathWithBooleanAndRequestResource_verify_passes() {
         var testBody = new TestBodyWithFlag("Luna", true);
-        mockApi.when(() -> testMockedApi.createMatchWithJsonPathBoolean("Luna", true)).willReturn();
+        mockApi.when(() -> testMockedApi.createMatchWithJsonPathBoolean("Luna", true)).thenReturnDefault();
 
         try {
             HttpClient.newHttpClient()
@@ -207,7 +207,7 @@ public abstract class AbstractJsonPathIntegrationTest extends AbstractIntegratio
     @Test
     void mockPostWithJsonPathWithNumberAndRequestResource_verify_passes() {
         var testBody = new TestBodyWithNumber("Ginny", 42);
-        mockApi.when(() -> testMockedApi.createMatchWithJsonPathNumber("Ginny", 42)).willReturn();
+        mockApi.when(() -> testMockedApi.createMatchWithJsonPathNumber("Ginny", 42)).thenReturnDefault();
 
         try {
             HttpClient.newHttpClient()
@@ -227,7 +227,7 @@ public abstract class AbstractJsonPathIntegrationTest extends AbstractIntegratio
     @Test
     void mockPostWithStaticJsonPathAndRequestResource_verify_passes() {
         var testBody = new TestBodyWithRootElementA("aaa", "bbb");
-        mockApi.when(() -> testMockedApi.staticJsonPathExpression("bbb")).willReturn();
+        mockApi.when(() -> testMockedApi.staticJsonPathExpression("bbb")).thenReturnDefault();
 
         postToStaticJsonEndpoint(testBody.toJson());
 
@@ -237,7 +237,7 @@ public abstract class AbstractJsonPathIntegrationTest extends AbstractIntegratio
     @Test
     void mockPostWithStaticJsonPathAndRequestResourceWithStaticExpressionNotMatching_verify_fails() {
         var testBody = new TestBodyWithoutRootElementA("aaa", "bbb");
-        mockApi.when(() -> testMockedApi.staticJsonPathExpression("bbb")).willReturn();
+        mockApi.when(() -> testMockedApi.staticJsonPathExpression("bbb")).thenReturnDefault();
 
         postToStaticJsonEndpoint(testBody.toJson());
 

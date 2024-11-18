@@ -34,7 +34,7 @@ public abstract class AbstractStaticHeaderIntegrationTest extends AbstractIntegr
     @Test
     void mockGetWithHeaderAnnotation_requestResource_specifiedResponseReturned() {
         String helloMessage = "hello " + UUID.randomUUID();
-        mockApi.when(testMockedApi.getWithHeader()).willReturn(helloMessage);
+        mockApi.when(testMockedApi.getWithHeader()).thenReturn(helloMessage);
 
         String headerValue = "v1";
         HttpResponse<String> response = getWithHeader(headerValue);
@@ -46,7 +46,7 @@ public abstract class AbstractStaticHeaderIntegrationTest extends AbstractIntegr
     @Test
     void mockGetWithHeaderAnnotation_requestResourceWithHeaderValueMismatch_notFound() {
         String helloMessage = "hello " + UUID.randomUUID();
-        mockApi.when(testMockedApi.getWithHeader()).willReturn(helloMessage);
+        mockApi.when(testMockedApi.getWithHeader()).thenReturn(helloMessage);
 
         String headerValue = "v2";
         HttpResponse<String> response = getWithHeader(headerValue);
@@ -56,7 +56,7 @@ public abstract class AbstractStaticHeaderIntegrationTest extends AbstractIntegr
 
     @Test
     void mockGetWithHeaderAnnotationAndRequestResource_verify_assertionPasses() {
-        mockApi.when(testMockedApi.getWithHeader()).willReturn("hello " + UUID.randomUUID());
+        mockApi.when(testMockedApi.getWithHeader()).thenReturn("hello " + UUID.randomUUID());
         getWithHeader("v1");
 
         assertThatNoException()
@@ -66,7 +66,7 @@ public abstract class AbstractStaticHeaderIntegrationTest extends AbstractIntegr
     @Test
     @SuppressWarnings("java:S5778")
     void mockGetWithHeaderAnnotationAndRequestResource_verifyNone_assertionError() {
-        mockApi.when(testMockedApi.getWithHeader()).willReturn("hello " + UUID.randomUUID());
+        mockApi.when(testMockedApi.getWithHeader()).thenReturn("hello " + UUID.randomUUID());
         getWithHeader("v1");
 
         assertThatExceptionOfType(AssertionError.class)

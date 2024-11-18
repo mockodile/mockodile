@@ -36,7 +36,7 @@ public abstract class AbstractHeaderParameterIntegrationTest extends AbstractInt
     void mockGetWithHeaderParam_requestResource_specifiedResponseReturned() {
         String helloMessage = "hello " + UUID.randomUUID();
         String headerParamValue = UUID.randomUUID().toString();
-        mockApi.when(testMockedApi.getWithHeaderParam(headerParamValue)).willReturn(helloMessage);
+        mockApi.when(testMockedApi.getWithHeaderParam(headerParamValue)).thenReturn(helloMessage);
 
         HttpResponse<String> response = getWithHeaderParam(headerParamValue);
 
@@ -49,7 +49,7 @@ public abstract class AbstractHeaderParameterIntegrationTest extends AbstractInt
         String helloMessage = "hello " + UUID.randomUUID();
         String headerParamValue = UUID.randomUUID().toString();
         String wrongHeaderParamValue = UUID.randomUUID().toString();
-        mockApi.when(testMockedApi.getWithHeaderParam(headerParamValue)).willReturn(helloMessage);
+        mockApi.when(testMockedApi.getWithHeaderParam(headerParamValue)).thenReturn(helloMessage);
 
         HttpResponse<String> response = getWithHeaderParam(wrongHeaderParamValue);
 
@@ -60,7 +60,7 @@ public abstract class AbstractHeaderParameterIntegrationTest extends AbstractInt
     void mockGetWithHeaderParamAnyValue_requestResource_specifiedResponseReturned() {
         String helloMessage = "hello " + UUID.randomUUID();
         String headerParamValue = UUID.randomUUID().toString();
-        mockApi.when(testMockedApi.getWithHeaderParam(matchesAnyString())).willReturn(helloMessage);
+        mockApi.when(testMockedApi.getWithHeaderParam(matchesAnyString())).thenReturn(helloMessage);
 
         HttpResponse<String> response = getWithHeaderParam(headerParamValue);
 
@@ -71,7 +71,7 @@ public abstract class AbstractHeaderParameterIntegrationTest extends AbstractInt
     @Test
     void mockGetWithHeaderParamAnyValue_requestResourceWithoutHeaderParam_notFound() {
         String helloMessage = "hello " + UUID.randomUUID();
-        mockApi.when(testMockedApi.getWithHeaderParam(matchesAnyString())).willReturn(helloMessage);
+        mockApi.when(testMockedApi.getWithHeaderParam(matchesAnyString())).thenReturn(helloMessage);
 
         HttpResponse<String> response = getWithHeaderParam(null);
 
@@ -82,7 +82,7 @@ public abstract class AbstractHeaderParameterIntegrationTest extends AbstractInt
     void mockGetWithHeaderParamAndRequestResource_verify_assertionPasses() {
         String headerParamValue = UUID.randomUUID().toString();
         mockApi.when(testMockedApi.getWithHeaderParam(headerParamValue))
-                .willReturn("hello " + UUID.randomUUID());
+                .thenReturn("hello " + UUID.randomUUID());
         getWithHeaderParam(headerParamValue);
 
         assertThatNoException().isThrownBy(() -> mockApi.verify(testMockedApi.getWithHeaderParam(headerParamValue)));
@@ -94,7 +94,7 @@ public abstract class AbstractHeaderParameterIntegrationTest extends AbstractInt
         String headerParamValue = UUID.randomUUID().toString();
         String wrongHeaderParamValue = UUID.randomUUID().toString();
         mockApi.when(testMockedApi.getWithHeaderParam(headerParamValue))
-                .willReturn("hello " + UUID.randomUUID());
+                .thenReturn("hello " + UUID.randomUUID());
         getWithHeaderParam(headerParamValue);
 
         assertThatExceptionOfType(AssertionError.class)
@@ -105,7 +105,7 @@ public abstract class AbstractHeaderParameterIntegrationTest extends AbstractInt
     void mockGetWithHeaderParamAndRequestResource_verifyWithAnyValue_assertionPasses() {
         String headerParamValue = UUID.randomUUID().toString();
         mockApi.when(testMockedApi.getWithHeaderParam(headerParamValue))
-                .willReturn("hello " + UUID.randomUUID());
+                .thenReturn("hello " + UUID.randomUUID());
         getWithHeaderParam(headerParamValue);
 
         assertThatNoException()
@@ -117,7 +117,7 @@ public abstract class AbstractHeaderParameterIntegrationTest extends AbstractInt
     void mockGetWithHeaderParamAndRequestResource_verifyNone_assertionError() {
         String headerParamValue = UUID.randomUUID().toString();
         mockApi.when(testMockedApi.getWithHeaderParam(headerParamValue))
-                .willReturn("hello " + UUID.randomUUID());
+                .thenReturn("hello " + UUID.randomUUID());
         getWithHeaderParam(headerParamValue);
 
         assertThatExceptionOfType(AssertionError.class)
@@ -128,7 +128,7 @@ public abstract class AbstractHeaderParameterIntegrationTest extends AbstractInt
     @SuppressWarnings("java:S5778")
     void mockGetWithHeaderParamEqualsAndRequestResourceNotMatched_verifyNone_assertionPasses() {
         mockApi.when(testMockedApi.getWithHeaderParam("hello.*world"))
-                .willReturn("hello " + UUID.randomUUID());
+                .thenReturn("hello " + UUID.randomUUID());
         getWithHeaderParam("hello-world");
 
         assertThatNoException()

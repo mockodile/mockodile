@@ -33,7 +33,7 @@ public abstract class AbstractResponseHeaderIntegrationTest extends AbstractInte
         }
         var testMockedApi = mockApi.mock(TestMockedApi.class);
 
-        mockApi.when(testMockedApi.sayHello()).willReturn("hello");
+        mockApi.when(testMockedApi.sayHello()).thenReturn("hello");
 
         HttpResponse<String> response = getWithFixedEndpoint();
 
@@ -54,7 +54,7 @@ public abstract class AbstractResponseHeaderIntegrationTest extends AbstractInte
         }
 
         var testMockedApi = mockApi.mock(TestMockedApi.class);
-        mockApi.when(testMockedApi.sayHello()).willReturn("hello");
+        mockApi.when(testMockedApi.sayHello()).thenReturn("hello");
 
         HttpResponse<String> response = getWithFixedEndpoint();
 
@@ -74,7 +74,7 @@ public abstract class AbstractResponseHeaderIntegrationTest extends AbstractInte
         }
 
         var testMockedApi = mockApi.mock(TestMockedApi.class);
-        mockApi.when(testMockedApi.sayHello()).willReturn("hello");
+        mockApi.when(testMockedApi.sayHello()).thenReturn("hello");
 
         HttpResponse<String> response = getWithFixedEndpoint();
 
@@ -94,7 +94,7 @@ public abstract class AbstractResponseHeaderIntegrationTest extends AbstractInte
         }
 
         var testMockedApi = mockApi.mock(TestMockedApi.class);
-        mockApi.when(testMockedApi.sayHello()).willReturn("hello");
+        mockApi.when(testMockedApi.sayHello()).thenReturn("hello");
 
         HttpResponse<String> response = getWithFixedEndpoint();
 

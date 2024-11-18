@@ -34,7 +34,7 @@ public abstract class AbstractStaticResourceIntegrationTest extends AbstractInte
     void mockGetForStaticResource_requestResource_specifiedResponseReturned() {
         String helloMessage = "hello " + UUID.randomUUID();
         mockApi.when(testMockedApi.sayHello())
-                .willReturn(helloMessage);
+                .thenReturn(helloMessage);
 
         HttpResponse<String> response = getWithFixedEndpoint();
 
@@ -46,7 +46,7 @@ public abstract class AbstractStaticResourceIntegrationTest extends AbstractInte
     void mockGetForStaticResourceAndRequestResource_verifyEndpointCalled_assertionPasses() {
         String helloMessage = "hello " + UUID.randomUUID();
         mockApi.when(testMockedApi.sayHello())
-                .willReturn(helloMessage);
+                .thenReturn(helloMessage);
         getWithFixedEndpoint();
 
         mockApi.verify(testMockedApi.sayHello());

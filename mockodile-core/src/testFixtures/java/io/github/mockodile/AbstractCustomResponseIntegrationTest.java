@@ -38,7 +38,7 @@ public abstract class AbstractCustomResponseIntegrationTest extends AbstractInte
     @Test
     void mockGetWithResponseWithCustomDto_requestResource_specifiedResponseReturned() {
         PersonTestDto personTestData = new PersonTestDto("Ron", "Weasley", 11);
-        mockApi.when(testMockedApi.getPerson()).willReturn(personTestData);
+        mockApi.when(testMockedApi.getPerson()).thenReturn(personTestData);
 
         var personResponse = getPerson();
 
@@ -49,7 +49,7 @@ public abstract class AbstractCustomResponseIntegrationTest extends AbstractInte
     @Test
     void mockGetWithResponseWithCustomStatusAndDto_requestResource_specifiedResponseReturned() {
         PersonTestDto personTestData = new PersonTestDto("Fred", "Weasley", 14);
-        mockApi.when(testMockedApi.getPerson()).willReturn(201, personTestData, HttpHeaders.builder().build());
+        mockApi.when(testMockedApi.getPerson()).thenRespond(201, personTestData);
 
         var personResponse = getPerson();
 
@@ -60,7 +60,7 @@ public abstract class AbstractCustomResponseIntegrationTest extends AbstractInte
     @Test
     void mockGetWithResponseWithAdditionalHeader_requestResource_specifiedResponseReturned() {
         PersonTestDto personTestData = new PersonTestDto("George", "Weasley", 14);
-        mockApi.when(testMockedApi.getPerson()).willReturn(201, personTestData, HttpHeaders.builder().add("x-house", "the burrow").build());
+        mockApi.when(testMockedApi.getPerson()).thenRespond(201, personTestData, HttpHeaders.builder().add("x-house", "the burrow").build());
 
         var personResponse = getPerson();
 

@@ -36,7 +36,7 @@ public abstract class AbstractQueryParameterIntegrationTest extends AbstractInte
     void mockGetWithQueryParam_requestResource_specifiedResponseReturned() {
         String helloMessage = "hello " + UUID.randomUUID();
         String queryParamValue = UUID.randomUUID().toString();
-        mockApi.when(testMockedApi.getWithQueryParam(queryParamValue)).willReturn(helloMessage);
+        mockApi.when(testMockedApi.getWithQueryParam(queryParamValue)).thenReturn(helloMessage);
 
         HttpResponse<String> response = getWithQueryParam(queryParamValue);
 
@@ -49,7 +49,7 @@ public abstract class AbstractQueryParameterIntegrationTest extends AbstractInte
         String helloMessage = "hello " + UUID.randomUUID();
         String queryParamValue = UUID.randomUUID().toString();
         String wrongQueryParamValue = UUID.randomUUID().toString();
-        mockApi.when(testMockedApi.getWithQueryParam(queryParamValue)).willReturn(helloMessage);
+        mockApi.when(testMockedApi.getWithQueryParam(queryParamValue)).thenReturn(helloMessage);
 
         HttpResponse<String> response = getWithQueryParam(wrongQueryParamValue);
 
@@ -60,7 +60,7 @@ public abstract class AbstractQueryParameterIntegrationTest extends AbstractInte
     void mockGetWithQueryParamMatchesAnyValue_requestResource_specifiedResponseReturned() {
         String helloMessage = "hello " + UUID.randomUUID();
         String queryParamValue = UUID.randomUUID().toString();
-        mockApi.when(testMockedApi.getWithQueryParam(matchesAnyString())).willReturn(helloMessage);
+        mockApi.when(testMockedApi.getWithQueryParam(matchesAnyString())).thenReturn(helloMessage);
 
         HttpResponse<String> response = getWithQueryParam(queryParamValue);
 
@@ -72,7 +72,7 @@ public abstract class AbstractQueryParameterIntegrationTest extends AbstractInte
     void mockGetWithQueryParam_requestResourceWithoutQueryParam_notFound() {
         String helloMessage = "hello " + UUID.randomUUID();
         String queryParamValue = UUID.randomUUID().toString();
-        mockApi.when(testMockedApi.getWithQueryParam(queryParamValue)).willReturn(helloMessage);
+        mockApi.when(testMockedApi.getWithQueryParam(queryParamValue)).thenReturn(helloMessage);
 
         HttpResponse<String> response = getWithQueryParam(null);
 
@@ -82,7 +82,7 @@ public abstract class AbstractQueryParameterIntegrationTest extends AbstractInte
     @Test
     void mockGetWithQueryParamAndRequestResource_verify_assertionPasses() {
         String queryParamValue = UUID.randomUUID().toString();
-        mockApi.when(testMockedApi.getWithQueryParam(matchesAnyString())).willReturn("hello " + UUID.randomUUID());
+        mockApi.when(testMockedApi.getWithQueryParam(matchesAnyString())).thenReturn("hello " + UUID.randomUUID());
         getWithQueryParam(queryParamValue);
 
         assertThatNoException()
@@ -92,7 +92,7 @@ public abstract class AbstractQueryParameterIntegrationTest extends AbstractInte
     @Test
     void mockGetWithQueryParamAndRequestResource_verifyMatchesAnyString_assertionPasses() {
         String queryParamValue = UUID.randomUUID().toString();
-        mockApi.when(testMockedApi.getWithQueryParam(matchesAnyString())).willReturn("hello " + UUID.randomUUID());
+        mockApi.when(testMockedApi.getWithQueryParam(matchesAnyString())).thenReturn("hello " + UUID.randomUUID());
         getWithQueryParam(queryParamValue);
 
         assertThatNoException()
@@ -103,7 +103,7 @@ public abstract class AbstractQueryParameterIntegrationTest extends AbstractInte
     @SuppressWarnings("java:S5778")
     void mockGetWithQueryParamAndRequestResource_verifyNone_assertionError() {
         String queryParamValue = UUID.randomUUID().toString();
-        mockApi.when(testMockedApi.getWithQueryParam(matchesAnyString())).willReturn("hello " + UUID.randomUUID());
+        mockApi.when(testMockedApi.getWithQueryParam(matchesAnyString())).thenReturn("hello " + UUID.randomUUID());
         getWithQueryParam(queryParamValue);
 
         assertThatExceptionOfType(AssertionError.class)
@@ -112,7 +112,7 @@ public abstract class AbstractQueryParameterIntegrationTest extends AbstractInte
 
     @Test
     void mockGetAndRequestResourceWithQueryParamEqualsNotMatched_verifyNone_assertionPasses() {
-        mockApi.when(testMockedApi.getWithQueryParam("any.*id")).willReturn("hello " + UUID.randomUUID());
+        mockApi.when(testMockedApi.getWithQueryParam("any.*id")).thenReturn("hello " + UUID.randomUUID());
         // does not match with an equals
         getWithQueryParam("any-id");
 

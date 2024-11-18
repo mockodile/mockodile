@@ -31,8 +31,24 @@ public class OngoingStubbing<T> {
      * {@link HeaderParam}.
      *
      * @param body the return value
+     *
+     * @deprecated use then return
      */
+    @Deprecated(since = "0.0.4")
     public void willReturn(T body) {
+        thenReturn(body);
+    }
+
+    /**
+     * Specify the return body, the body will be mapped to json using the object mapper.
+     * The status will be the status specified on the method of the @MockedApi method with the annotation.
+     * {@link Response#status()} or 200 by default.
+     * The headers will include any headers specified on the @MockedApi method with
+     * {@link HeaderParam}.
+     *
+     * @param body the return value
+     */
+    public void thenReturn(T body) {
         @SuppressWarnings("unchecked")
         Response.ResponseBuilder<T> responseBuilder = (Response.ResponseBuilder<T>) Response.builder()
                 .withStatus(invocation.annotationData().responseAnnotationData().defaultStatus())
@@ -42,7 +58,36 @@ public class OngoingStubbing<T> {
             responseBuilder.withBody(body);
         }
 
-        willReturnResponse(responseBuilder.build());
+        thenRespond(responseBuilder.build());
+    }
+
+    /**
+     * Specify the complete http response including status, body and headers.
+     * The status param will overwrite any annotated @Response.status() annotation.
+     * The body will be serialized to json using the object mapper.
+     * The headers provided will be combined with any headers specified on the @MockedApi.
+     *
+     * @param status the status of the http response
+     * @param body   the body of the http response
+     *
+     * @deprecated use thenRespond
+     */
+    @Deprecated(since = "0.0.4")
+    public void willReturn(int status, T body, HttpHeaders headers) {
+        thenRespond(status, body, headers);
+    }
+
+    /**
+     * Specify the complete http response including status, body and headers.
+     * The status param will overwrite any annotated @Response.status() annotation.
+     * The body will be serialized to json using the object mapper.
+     * The headers provided will only contain headers specified on the @MockedApi.
+     *
+     * @param status the status of the http response
+     * @param body   the body of the http response
+     */
+    public void thenRespond(int status, T body) {
+        thenRespond(status, body, HttpHeaders.empty());
     }
 
     /**
@@ -54,7 +99,7 @@ public class OngoingStubbing<T> {
      * @param status the status of the http response
      * @param body   the body of the http response
      */
-    public void willReturn(int status, T body, HttpHeaders headers) {
+    public void thenRespond(int status, T body, HttpHeaders headers) {
         @SuppressWarnings("unchecked")
         Response.ResponseBuilder<T> responseBuilder = (Response.ResponseBuilder<T>) Response.builder()
                 .withStatus(status)
@@ -64,7 +109,22 @@ public class OngoingStubbing<T> {
         if (body != null) {
             responseBuilder.withBody(body);
         }
-        willReturnResponse(responseBuilder.build());
+        thenRespond(responseBuilder.build());
+    }
+
+    /**
+     * Specify the status of the http response.
+     * The status param will overwrite any annotated @Response.status() annotation.
+     * No body will be returned.
+     * The headers provided will only contain headers specified on the @MockedApi.
+     *
+     * @param status the status of the http response
+     *
+     * @deprecated use thenReturnStatus
+     */
+    @Deprecated(since = "0.0.4")
+    public void willReturn(int status) {
+        thenReturnStatus(status);
     }
 
     /**
@@ -75,12 +135,44 @@ public class OngoingStubbing<T> {
      *
      * @param status the status of the http response
      */
-    public void willReturn(int status) {
+    public void thenReturnStatus(int status) {
         @SuppressWarnings("unchecked")
         Response.ResponseBuilder<T> responseBuilder = (Response.ResponseBuilder<T>) Response.builder()
                 .withStatus(status)
                 .withHeaders(invocation.annotationData().responseAnnotationData().headers());
-        willReturnResponse(responseBuilder.build());
+        thenRespond(responseBuilder.build());
+    }
+
+    /**
+     * Allow a complete custom response to be specified.
+     * This is useful when the declarative means to specify a response are not adequate
+     * or for testing edge cases where an unexpected response should be produced.
+     * <br/>
+     * This method is not restricted to generic type T to allow clients to return
+     * body objects other than the one defined in the contract.
+     *
+     * @param response the response.
+     * @deprecated use willRespond
+     */
+    @Deprecated(since = "0.0.4")
+    public void willReturnResponse(Response<?> response) {
+        willRespond(response);
+    }
+
+    /**
+     * Allow a complete custom response to be specified.
+     * This is useful when the declarative means to specify a response are not adequate
+     * or for testing edge cases where an unexpected response should be produced.
+     * <br/>
+     * This method is not restricted to generic type T to allow clients to return
+     * body objects other than the one defined in the contract.
+     *
+     * @param response the response.
+     * @deprecated use thenRespond
+     */
+    @Deprecated(since = "0.0.4")
+    public void willRespond(Response<?> response) {
+        thenRespond(response);
     }
 
     /**
@@ -93,79 +185,79 @@ public class OngoingStubbing<T> {
      *
      * @param response the response.
      */
-    public void willReturnResponse(Response<?> response) {
+    public void thenRespond(Response<?> response) {
         mocker.register(invocation, response);
     }
 
     public void ok() {
-        willReturn(200);
+        thenReturnStatus(200);
     }
 
     public void created() {
-        willReturn(201);
+        thenReturnStatus(201);
     }
 
     public void accepted() {
-        willReturn(202);
+        thenReturnStatus(202);
     }
 
     public void noContent() {
-        willReturn(204);
+        thenReturnStatus(204);
     }
 
     public void movedPermanently() {
-        willReturn(301);
+        thenReturnStatus(301);
     }
 
     public void temporaryRedirect() {
-        willReturn(307);
+        thenReturnStatus(307);
     }
 
     public void permanentRedirect() {
-        willReturn(308);
+        thenReturnStatus(308);
     }
 
     public void badRequest() {
-        willReturn(400);
+        thenReturnStatus(400);
     }
 
     public void unauthorized() {
-        willReturn(401);
+        thenReturnStatus(401);
     }
 
     public void forbidden() {
-        willReturn(403);
+        thenReturnStatus(403);
     }
 
     public void notFound() {
-        willReturn(404);
+        thenReturnStatus(404);
     }
 
     public void conflict() {
-        willReturn(409);
+        thenReturnStatus(409);
     }
 
     public void preConditionFailed() {
-        willReturn(412);
+        thenReturnStatus(412);
     }
 
     public void unprocessableEntity() {
-        willReturn(422);
+        thenReturnStatus(422);
     }
 
     public void tooManyRequests() {
-        willReturn(429);
+        thenReturnStatus(429);
     }
 
     public void serverError() {
-        willReturn(500);
+        thenReturnStatus(500);
     }
 
     public void badGateway() {
-        willReturn(502);
+        thenReturnStatus(502);
     }
 
     public void serviceUnavailable() {
-        willReturn(503);
+        thenReturnStatus(503);
     }
 }

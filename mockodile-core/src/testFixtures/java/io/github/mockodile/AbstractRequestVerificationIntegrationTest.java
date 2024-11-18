@@ -46,7 +46,7 @@ public abstract class AbstractRequestVerificationIntegrationTest extends Abstrac
     @Test
     void mockPostAndRequestResource_verifyAndGetRequestBody_bodyMatches() {
         mockApi.when(() -> testMockedApi.create(anyBody()))
-                .willReturn();
+                .thenReturnDefault();
         TestDto testDto = new TestDto("albus", "dumbledore", 68);
         doCreate(testDto);
 
@@ -60,7 +60,7 @@ public abstract class AbstractRequestVerificationIntegrationTest extends Abstrac
     @Test
     void mockPostAndRequestResource_verifyAndGetRequestBodyAsString_bodyMatches() {
         mockApi.when(() -> testMockedApi.create(anyBody()))
-                .willReturn();
+                .thenReturnDefault();
         TestDto testDto = new TestDto("albus", "dumbledore", 68);
         doCreate(testDto);
 
@@ -73,7 +73,7 @@ public abstract class AbstractRequestVerificationIntegrationTest extends Abstrac
     @Test
     void mockPostAndRequestResource_verifyAndGetRequest_requestMatches() {
         mockApi.when(() -> testMockedApi.create(anyBody()))
-                .willReturn();
+                .thenReturnDefault();
         TestDto testDto = new TestDto("albus", "dumbledore", 68);
         doCreate(testDto);
 
@@ -89,7 +89,7 @@ public abstract class AbstractRequestVerificationIntegrationTest extends Abstrac
     @Test
     void mockPostAndRequestResource_verifyAndGetRequestWithBodyAsString_requestMatches() {
         mockApi.when(() -> testMockedApi.create(anyBody()))
-                .willReturn();
+                .thenReturnDefault();
         TestDto testDto = new TestDto("albus", "dumbledore", 68);
         doCreate(testDto);
 
@@ -105,7 +105,7 @@ public abstract class AbstractRequestVerificationIntegrationTest extends Abstrac
     @Test
     void mockPostAndRequestResourceTwice_verifyAndGetRequests_requestsMatch() {
         mockApi.when(() -> testMockedApi.create(anyBody()))
-                .willReturn();
+                .thenReturnDefault();
 
         TestDto testDtoOne = new TestDto("albus", "dumbledore", 68);
         TestDto testDtoTwo = new TestDto("minerva", "mcgonagall", 62);
@@ -126,7 +126,7 @@ public abstract class AbstractRequestVerificationIntegrationTest extends Abstrac
     @Test
     void mockPostAndRequestResourceTwice_verifyAndGetRequestWithBodyAsString_requestsMatch() {
         mockApi.when(() -> testMockedApi.create(anyBody()))
-                .willReturn();
+                .thenReturnDefault();
 
         TestDto testDtoOne = new TestDto("albus", "dumbledore", 68);
         TestDto testDtoTwo = new TestDto("minerva", "mcgonagall", 62);
